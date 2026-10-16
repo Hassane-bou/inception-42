@@ -1,4 +1,15 @@
+#Secrets
 srcs/.env
 secrets/credentials.txt
 secrets/db_password.txt
 secrets/db_root_password.txt
+
+
+#Editor / OS
+.DS_Store
+*.swp
+*.swo
+.vscode/
+
+#Temporary files
+*.log
