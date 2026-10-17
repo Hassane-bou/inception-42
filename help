@@ -1,0 +1,11 @@
+
+# Fermer complètement Chrome
+
+pkill -f "Google Chrome"
+sleep 2
+
+#r elancer avec un profil temporaire
+open -na "Google Chrome" --args --user-data-dir=/tmp/chrome-42 --host-resolver-rules="MAP haboucha.42.fr 127.0.0.1:4430"
+
+#ecrire ca dans browser ouvert:
+https://haboucha.42.fr

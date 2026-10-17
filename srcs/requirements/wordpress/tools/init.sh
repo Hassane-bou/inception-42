@@ -2,7 +2,10 @@
 
 set -e
 
+DB_PORT=3306
+export HTTP_HOST="$DOMAIN_NAME"
 cd /var/www/html
+
 
 if [ ! -f wp-load.php ]; then
     wp core download --allow-root
@@ -10,17 +13,10 @@ fi
 
 until php -r '
 mysqli_report(MYSQLI_REPORT_OFF);
-$db = @new mysqli(
-    getenv("DB_HOST"),
-    getenv("MYSQL_USER"),
-    getenv("MYSQL_PASSWORD"),
-    getenv("MYSQL_DATABASE")
-);
-if ($db->connect_error) {
-    exit(1);
-}
+$db = @new mysqli(getenv("DB_HOST"), getenv("MYSQL_USER"), getenv("MYSQL_PASSWORD"), getenv("MYSQL_DATABASE"), (int)getenv("DB_PORT"));
+if ($db->connect_error) { fwrite(STDERR, $db->connect_error . "\n"); exit(1); }
 $db->close();
-' ; do
+'; do
     echo "waiting for MariaDB..."
     sleep 2
 done
@@ -37,12 +33,14 @@ fi
 
 if ! wp core is-installed --allow-root; then
     wp core install \
-        --url="$DOMAIN_NAME" \
+        --url="https://$DOMAIN_NAME" \
         --title="$WP_TITLE" \
         --admin_user="$WP_ADMIN_USER" \
         --admin_password="$WP_ADMIN_PASSWORD" \
         --admin_email="$WP_ADMIN_EMAIL" \
+        --skip-email \
         --allow-root
 fi
+
 
 exec php-fpm8.2 -F

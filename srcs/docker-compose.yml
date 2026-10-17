@@ -12,6 +12,12 @@ services:
       - mariadb-data:/var/lib/mysql
     networks:
       - inception
+    healthcheck:
+      test: ["CMD-SHELL", "mysqladmin ping -h localhost -u\"$$MYSQL_USER\" -p\"$$MYSQL_PASSWORD\" --silent"]
+      interval: 5s
+      timeout: 3s
+      retries: 20
+      start_period: 10s
 
   wordpress:
     build:
