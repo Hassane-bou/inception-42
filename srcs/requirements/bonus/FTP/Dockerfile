@@ -9,6 +9,6 @@ COPY tools/start.sh /usr/local/bin/start.sh
 
 RUN chmod +x /usr/local/bin/start.sh
 
-EXPOSE 21 21000-21010
+EXPOSE 21 40000-40010
 
 CMD ["/usr/local/bin/start.sh"]

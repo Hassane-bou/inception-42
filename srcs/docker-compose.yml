@@ -29,6 +29,7 @@ services:
       - .env
     depends_on:
       - mariadb
+      - redis
     volumes:
       - wordpress-data:/var/www/html
     networks:
@@ -44,10 +45,61 @@ services:
       - "443:443"
     depends_on:
       - wordpress
+      - adminer
+      - static
     volumes:
       - wordpress-data:/var/www/html:ro
     networks:
       - inception
+    
+  redis:
+    build:
+      context: ./requirements/bonus/Redis
+    image: redis:v1
+    container_name: redis
+    restart: unless-stopped
+    networks:
+      - inception
+
+  adminer:
+    build:
+      context: ./requirements/bonus/Adminer
+    image: adminer:v1
+    container_name: adminer
+    restart: unless-stopped
+    depends_on:
+      mariadb:
+        condition: service_healthy
+    networks:
+      - inception
+  
+  static:
+    build:
+      context: ./requirements/bonus/static
+    image: static:v1
+    container_name: static
+    restart: unless-stopped
+    networks:
+      - inception
+  
+  ftp:
+    build:
+      context: ./requirements/bonus/FTP
+    image: ftp:v1
+    container_name: ftp
+    restart: unless-stopped
+    env_file:
+      - .env
+    ports:
+      - "21:21"
+      - "40000-40010:40000-40010"
+    depends_on:
+      - wordpress
+    volumes:
+      - wordpress-data:/var/www/html
+    networks:
+      - inception
+
 
 volumes:
   mariadb-data:
