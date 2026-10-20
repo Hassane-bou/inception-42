@@ -1,11 +1,39 @@
-
-# Fermer complètement Chrome
+#Fermer complètement Chrome
 
 pkill -f "Google Chrome"
 sleep 2
 
-#r elancer avec un profil temporaire
+#relancer avec un profil temporaire
 open -na "Google Chrome" --args --user-data-dir=/tmp/chrome-42 --host-resolver-rules="MAP haboucha.42.fr 127.0.0.1:4430"
 
 #ecrire ca dans browser ouvert:
 https://haboucha.42.fr
+
+
+
+
+#info env:
+
+
+DOMAIN_NAME=haboucha.42.fr
+
+#MYSQL SETUP
+MYSQL_DATABASE=wordpress
+MYSQL_USER=wp_user
+MYSQL_PASSWORD=secret123
+MYSQL_ROOT_PASSWORD=root123
+
+#wordpress
+DB_HOST=mariadb
+WP_TITLE=Inception
+WP_ADMIN_USER=haboucha_rootuser
+WP_ADMIN_PASSWORD=ChangeThishabouchaPassword123!
+WP_ADMIN_EMAIL=haboucha@example.com
+WP_USER=haboucha_user
+WP_USER_PASSWORD=ChangeThisUserPassword123;
+WP_USER_EMAIL=user@example.com
+
+
+# FTP
+FTP_USER=ftpuser
+FTP_PASSWORD=ftpuser123
