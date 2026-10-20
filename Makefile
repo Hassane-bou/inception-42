@@ -35,7 +35,14 @@ clean:
 
 # Nettoyage total : conteneurs, volumes, images ET donnees sur le disque
 fclean: clean
-	docker system prune -af
+	@images="$$(docker images -q)"; \
+	if [ -n "$$images" ]; then \
+		docker rmi -f $$images; \
+	else \
+		echo "Aucune image Docker a supprimer."; \
+	fi
+	sudo rm -rf $(DATA_DIR)/wordpress $(DATA_DIR)/mariadb
+
 
 # Tout supprimer puis tout reconstruire
 re: fclean up

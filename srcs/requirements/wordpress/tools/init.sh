@@ -43,6 +43,15 @@ if ! wp core is-installed --allow-root; then
 fi
 
 
+if [ -n "${WP_USER:-}" ] && [ -n "${WP_USER_EMAIL:-}" ] && [ -n "${WP_USER_PASSWORD:-}" ]; then
+    if ! wp user get "$WP_USER" --field=user_login --allow-root >/dev/null 2>&1; then
+        wp user create "$WP_USER" "$WP_USER_EMAIL" \
+            --role=author \
+            --user_pass="$WP_USER_PASSWORD" \
+            --allow-root
+    fi
+fi
+
 wp config set WP_REDIS_HOST redis   --allow-root
 wp config set WP_REDIS_PORT 6379 --raw --allow-root
 wp config set WP_CACHE true --raw --allow-root
